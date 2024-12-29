@@ -1,0 +1,17 @@
+version: '3'
+name: wallet-db
+
+services:
+  pg:
+    image: bitnami/postgresql:14.13.0
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db-event:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=finance
+
+volumes:
+  db-event:
