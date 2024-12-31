@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { createNewUser } from '../models/userModels'
+import { createNewUser, login } from '../models/userModels'
 import bcrypt from 'bcrypt'
 import { prisma } from '../lib/prismaClient'
 
@@ -27,4 +27,30 @@ export const createUser = async (req: Request, res: Response) => {
    const {password: _, ...newUser} = user
 
    res.json({message: "Usuário criado com sucesso.", newUser})
+}
+
+export const loginUser = async (req: Request, res: Response) => {
+   const { email, password } = req.body
+
+   const user = await prisma.user.findFirst({
+      where: {
+         email
+      }
+   })
+
+   if(!user) {
+      res.status(400).json({message: "email ou senha incorretos."})
+      return
+   }
+
+  const verifyPass = await bcrypt.compare(password, user.password)
+
+   if(!verifyPass) {
+      res.status(400).json({message: "email ou senha incorretos."})
+      return
+   }
+
+   const data = await login(user)
+
+   res.status(data.status).json(data)
 }
