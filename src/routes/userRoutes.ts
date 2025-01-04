@@ -1,9 +1,8 @@
 import { Router } from "express";
 import { createUser, loginUser } from "../controller/userController";
-import { validateUserCreation } from "../middleware/createUserMiddleware";
-import { validateUserLogin } from "../middleware/loginUserMiddleware";
+import { validateUser, registerSchema, loginSchema } from "../middleware/authMiddleware";
 
 export const userRouter = Router()
 
-userRouter.post('/user', validateUserCreation, createUser)
-userRouter.post('/login', validateUserLogin, loginUser)
+userRouter.post('/user', validateUser(registerSchema), createUser)
+userRouter.post('/login', validateUser(loginSchema), loginUser)
