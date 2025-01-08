@@ -19,4 +19,22 @@ model User {
   email     String
   password  String
   createdAt DateTime @default(now())
+  wallet    Wallet?
+}
+
+model Wallet {
+  id           String        @id @default(uuid())
+  balance      Float         @default(0.0)
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  amount    Float
+  type      String
+  createdAt DateTime @default(now())
+  walletId  String
+  wallet    Wallet   @relation(fields: [walletId], references: [id])
 }
