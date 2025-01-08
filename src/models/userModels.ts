@@ -17,8 +17,13 @@ export const createNewUser = async ({name, email, passwordHash}: User) => {
         data: {
             name,
             email,
-            password: passwordHash
-        }
+            password: passwordHash,
+            wallet: {
+                create: {
+                    balance: 0
+                }
+            }
+        },
     })
 
     return user
