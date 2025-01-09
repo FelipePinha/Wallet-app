@@ -11,6 +11,23 @@ interface CreateTransactionProps {
     }
 }
 
+
+export const getWalletTransactions = async (walletId: string) => {
+    const walletTransactions = await prisma.transaction.findMany({
+        where: {
+            walletId
+        }
+    })
+
+    const transactions = walletTransactions.map(transaction => {
+        const {walletId: _, ...restTransaction} = transaction
+
+        return restTransaction
+    })
+
+    return transactions
+}
+
 export const createNewTransaction = async ({amount, type, walletId, wallet}: CreateTransactionProps) => {
     const transaction = await prisma.transaction.create({
         data: {
